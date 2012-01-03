@@ -74,8 +74,6 @@ public class DAOEntreprise extends DAOContact {
 	}
 	
 	public void commit(){
-		//SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		//Session session = sessionFactory.openSession();
 		Session session = HibernateUtil.currentSession();
 		Transaction transaction = session.beginTransaction();
 		session.save(address);
@@ -88,7 +86,6 @@ public class DAOEntreprise extends DAOContact {
 		session.save(this.entreprise);
 		//session.flush();
 		transaction.commit();
-		//session.close();
 		HibernateUtil.closeSession();
 	}
 	
@@ -135,15 +132,6 @@ public class DAOEntreprise extends DAOContact {
 		for (ContactGroup contactGroup : this.contactGroupSet){
 			session.save(contactGroup);
 		}
-
-		//this.contactGroupSet.add(new ContactGroup(groupName));
-		/*
-		Set<String> setGroupName = new HashSet<String>();
-		setGroupName.add(groupName);
-		createContactGroupSet(setGroupName);
-		for (ContactGroup contactGroup : this.contactGroupSet){
-			session.save(contactGroup);
-		}*/
 		session.save(entreprise);
 		transaction.commit();
 

@@ -64,7 +64,6 @@ public class AddContact extends HttpServlet {
 			Set<String> phoneKindSet = new HashSet<String>();
 			Set<String> phoneNumberSet = new HashSet<String>();
 			String phoneKind = request.getParameter("phoneKind");
-			//System.out.println("PHONEKIND = " + phoneKind);
 			String phoneNumber = request.getParameter("phoneNumber");
 			phoneKindSet.add(phoneKind);
 			phoneNumberSet.add(phoneNumber);
@@ -90,34 +89,6 @@ public class AddContact extends HttpServlet {
 				daoContact.createContactGroupSet(groupNameSet);
 				daoContact.commit();
 			}
-			//		Contact contact1 = (Contact)context.getBean("beanContact");
-			//		Contact contact1 = new Contact();
-			//		contact1.setUpContact(firstName, lastName, email);	
-			//daoEntreprise.createEntreprise(firstName, lastName, email, 4646);
-			//this.daoContact.createContact(firstName, lastName, email);
-			//		this.daoContact.createContact(contact1);
-
-			
-			//		Address address = new Address();
-			//		address.setUpAddress(street, city, zip, country);
-			//daoEntreprise.createAdress(street, city, zip, country);
-			//this.daoContact.createAdress(street, city, zip, country);
-
-			
-			
-			//		PhoneNumber phoneNumberObject1 = new PhoneNumber();
-			//		phoneNumberObject1.setUpPhoneNumber(phoneNumber, phoneKind);
-			//daoEntreprise.createPhoneNumberSet(phoneNumberSet, phoneKindSet);
-			//this.daoContact.createPhoneNumberSet(phoneNumberSet, phoneKindSet);
-
-			
-			//		ContactGroup contactGroup1 = new ContactGroup();
-			//		contactGroup1.setUpContactGroup(groupName);
-			//daoEntreprise.createContactGroupSet(groupNameSet);
-			//this.daoContact.createContactGroupSet(groupNameSet);
-			//daoEntreprise.commit();
-			//this.daoContact.commit();
-
 			request.getRequestDispatcher("addContactSuccess.jsp").forward(request, response);
 		}
 		catch (Exception e){

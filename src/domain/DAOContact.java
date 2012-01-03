@@ -35,7 +35,6 @@ public class DAOContact {
 	public void createContactGroupSet(Set<String> groupNameSet){
 
 		Session session = HibernateUtil.currentSession();
-		//Transaction transaction = session.beginTransaction();
 		String hqlSearchGroup="from ContactGroup";
 		List list=session.createQuery(hqlSearchGroup).list();
 		Iterator it = list.iterator();
@@ -43,7 +42,6 @@ public class DAOContact {
 		for (String groupName : groupNameSet){
 			boolean existed=false;
 			while(it.hasNext()){
-				//System.out.println(((ContactGroup)it.next()).getGroupName());
 				ContactGroup contactGroup=(ContactGroup)it.next();
 				if (contactGroup.getGroupName().equals(groupName)){
 					existed=true;
@@ -75,8 +73,6 @@ public class DAOContact {
 	}
 
 	public void commit(){
-		//SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		//Session session = sessionFactory.openSession();
 		Session session = HibernateUtil.currentSession();
 		Transaction transaction = session.beginTransaction();
 		session.save(this.address);
@@ -89,7 +85,6 @@ public class DAOContact {
 		session.save(this.contact);
 		//session.flush();
 		transaction.commit();
-		//session.close();
 		HibernateUtil.closeSession();
 	}
 
@@ -135,15 +130,6 @@ public class DAOContact {
 		for (ContactGroup contactGroup : this.contactGroupSet){
 			session.save(contactGroup);
 		}
-
-		//this.contactGroupSet.add(new ContactGroup(groupName));
-		/*
-		Set<String> setGroupName = new HashSet<String>();
-		setGroupName.add(groupName);
-		createContactGroupSet(setGroupName);
-		for (ContactGroup contactGroup : this.contactGroupSet){
-			session.save(contactGroup);
-		}*/
 		session.save(contact);
 		transaction.commit();
 
