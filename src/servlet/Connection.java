@@ -23,6 +23,9 @@ public class Connection extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
+    
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -32,12 +35,11 @@ public class Connection extends HttpServlet {
 		String password = request.getParameter("password");
 		RequestDispatcher rd = request.getRequestDispatcher("pages/accueil.jsp");
 		if (username.equals(password)){
-			System.out.println("pass here");
 			rd.forward(request, response);
 		}
 		else{
-			//request.getRequestDispatcher("Index.html").forward(request, response);
-			response.sendRedirect("pages/index.jsp");
+			request.setAttribute("erreur", "Vous devez remplir les deux champs.");
+			request.getRequestDispatcher("pages/index.jsp").forward(request, response);
 		}
 	}
 

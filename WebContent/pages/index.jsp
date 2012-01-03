@@ -8,6 +8,12 @@
 </head>
 <body>
 <h3>Hello, What's your name?</h3>
+
+<%String erreur = (String) request.getAttribute("erreur");
+      if (erreur != null) { %>
+            <strong><FONT COLOR=red >Erreur : <%out.print(erreur); %></FONT></strong>
+      <% } %>
+      
 <form method="post" action="Connection">
 Name: <input type="text" name="username" size="25">
 Password: <input type="password" name="password" size="25">
