@@ -15,8 +15,8 @@
       <% } %>
       
 <form method="post" action="Connection">
-Name: <input type="text" name="username" size="25">
-Password: <input type="password" name="password" size="25">
+Name: <input type="text" name="username" size="25" value="cobra">
+Password: <input type="password" name="password" size="25" value="cobra">
 <p></p>
 <input type="submit" value="Submit">
 <input type="reset" value="Reset">

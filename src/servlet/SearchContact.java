@@ -18,6 +18,7 @@ import util.HibernateUtil;
 import domain.Address;
 import domain.Contact;
 import domain.DAOContact;
+import domain.Entreprise;
 import domain.UnknownContactException;
 
 /**
@@ -47,8 +48,9 @@ public class SearchContact extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username");
-		Contact contact=searchContact(username);
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		Contact contact=searchContact(firstName, lastName);
 		if (contact==null){
 			response.setContentType( "text/html" );
 			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
@@ -67,23 +69,35 @@ public class SearchContact extends HttpServlet {
 			request.setAttribute("country", contact.getAddress().getCountry());
 			request.setAttribute("phoneNumber", contact.getProfiles().iterator().next().getPhoneNumber());
 			request.setAttribute("groupName", contact.getBooks().iterator().next().getGroupName());
-			request.getRequestDispatcher("SearchResult.jsp").forward(request, response);
-		
+			//try{
+				//if (((Entreprise)contact).getNumSiret()!=0)
+				if (contact instanceof Entreprise){
+					request.setAttribute("numSiret", ((Entreprise)contact).getNumSiret());
+					request.getRequestDispatcher("SearchResultEntreprise.jsp").forward(request, response);
+				}
+			//}
+			//catch (Exception e){
+				else{
+					request.setAttribute("numSiret", "");
+					request.getRequestDispatcher("SearchResultContact.jsp").forward(request, response);
+				}
+			//}
+			
 		}
 	}
 
-	private synchronized Contact searchContact(String name){
+	private synchronized Contact searchContact(String firstName, String lastName){
 		Session session = HibernateUtil.currentSession();
 		String hqlSearch="select c from Contact as c left join fetch c.address a "
-						+ "left join fetch c.profiles p "
-						+ "left join fetch c.books b "
-						+ "where firstName like :name";
-		List list = session.createQuery(hqlSearch).setString("name", name).list();
+				+ "left join fetch c.profiles p "
+				+ "left join fetch c.books b "
+				+ "where firstName like :firstName and lastName like :lastName";
+		List list = session.createQuery(hqlSearch).setString("firstName", firstName).setString("lastName", lastName).list();
 		Iterator it = list.iterator();
 		//while(it.hasNext())
 		//{
 		// Contact contact = (Contact)it.next();
-	 
+
 		//}
 		HibernateUtil.closeSession();
 		if (it.hasNext()){

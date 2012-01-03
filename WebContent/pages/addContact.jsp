@@ -10,49 +10,54 @@
 	<h3>Enter your new contact</h3>
 	<form method="post" action="AddContact">
 		<table frame="border" cellpadding="1">
-			<tr>
-				<td>
-					<p></p>
-					First Name*: <input type="text" name="firstName" size="25" value="Toto">
-					<p></p>
-					Last Name*: <input type="text" name="lastName" size="25" value="Titi">
-					<p></p>
-					Email*: <input type="text" name="email" size="25" value="toto@titi.com">
-					<p></p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<p></p>
-					Street*: <input type="text" name="street" size="25" value="5, place de jussieu">
-					<p></p>
-					ZIP*: <input type="text" name="zip" size="25" value="75005">
-					<p></p> 
-					City*: <input type="text" name="city" size="25" value="paris">
-					<p></p>
-					Country*: <input type="text" name="country" size="25" value="France">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<p></p>
-					PhoneKind*: <select name="phoneKind">
+				<tr>
+					<td align="right">First Name*:</td>
+					<td align="left"> <input type="text" name="firstName" size="25" value="Toto"></td>
+				</tr>
+				<tr>
+					<td align="right">Last Name*:</td>
+					<td align="left"> <input type="text" name="lastName" size="25" value="Titi"></td>
+				</tr>
+				<tr>
+					<td align="right">Email*:</td>
+					<td align="left"><input type="text" name="email" size="25" value="toto@titi.com"></td>
+				</tr>
+				<tr>
+					<td align="right">Street*:</td> 
+					<td align="left"><input type="text" name="street" size="25" value="5, place de jussieu"></td>
+				</tr>
+				<tr>
+					<td align="right">ZIP*:</td> 
+					<td align="left"><input type="text" name="zip" size="25" value="75005"></td>
+				</tr>
+				<tr>
+					<td align="right">City*:</td> 
+					<td align="left"><input type="text" name="city" size="25" value="paris"></td>
+				</tr>
+				<tr>
+					<td align="right">Country*:</td> 
+					<td align="left"><input type="text" name="country" size="25" value="France"></td>
+				</tr>
+				<tr>
+					<td align="right">PhoneKind*: </td>
+					<td align="left"><select name="phoneKind">
 									<option value="MOBILE" selected="selected">MOBILE</option>
 									<option value="MAISON">MAISON</option>
 									<option value="TRAVAIL">TRAVAIL</option>
-								</select>
-					<p></p>
-					PhoneNumber*: <input type="text" name="phoneNumber" size="25" value="0123456789">
-					<p></p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<p></p>
-					Group Name*: <input type="text" name="groupName" size="25" value="AMIS">
-					<p></p>
-				</td>
-			</tr>
+								</select></td>
+				</tr>
+				<tr>
+					<td align="right">PhoneNumber*: </td>
+					<td align="left"><input type="text" name="phoneNumber" size="25" value="0123456789"></td>
+				</tr>
+				<tr>
+					<td align="right">Group Name*:</td> 
+					<td align="left"><input type="text" name="groupName" size="25" value="AMIS"></td>
+				</tr>
+				<tr>
+					<td align="right">Siret Number:</td>
+					<td align="left"> <input type="text" name="numSiret" size="25" value="8888"></td>
+				</tr>
 		</table>
 		<input type="submit" value="Submit"> <input type="reset" value="Reset" >
 	</form>

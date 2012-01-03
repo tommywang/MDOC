@@ -4,12 +4,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Search Contact</title>
 </head>
 <body>
 <h3>Enter the contact you are looking for</h3>
 <form method="post" action="SearchContact">
-Name: <input type="text" name="username" size="25">
+First Name: <input type="text" name="firstName" size="25">
+<p></p>
+Last Name: <input type="text" name="lastName" size="25">
 <p></p>
 <input type="submit" value="Submit">
 <input type="reset" value="Reset">

@@ -11,10 +11,10 @@ import util.HibernateUtil;
 
 public class DAOContact {
 	
-	private Contact contact;
-	private Address address;
-	private Set<ContactGroup> contactGroupSet;
-	private Set<PhoneNumber> phoneNumberSet;	
+	protected Contact contact;
+	protected Address address;
+	protected Set<ContactGroup> contactGroupSet;
+	protected Set<PhoneNumber> phoneNumberSet;	
 	
 	public DAOContact(){
 		this.contact = null;
@@ -65,7 +65,7 @@ public class DAOContact {
 			session.save(phoneNumber);
 		}
 		session.save(this.contact);
-		session.flush();
+		//session.flush();
 		transaction.commit();
 		//session.close();
 		HibernateUtil.closeSession();

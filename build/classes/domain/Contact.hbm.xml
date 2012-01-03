@@ -3,10 +3,11 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="domain">
-  <class name="Contact" table="contact">
+  <class name="Contact" table="contact" discriminator-value="C">
   	 <id name="id_contact" type="long" column="id_contact" >
    		<generator class="increment"/>
   	 </id>
+	 <discriminator column="typeContact" type="character"/>
   	 <property name="firstName" type="java.lang.String" column="firstName" />
 	 <property name="lastName" type="java.lang.String" column="lastName" />
 	 <property name="email" type="java.lang.String" column="email" />  
@@ -19,5 +20,8 @@
 		<key column="id_contact"/>
 		<many-to-many class="ContactGroup" column="id_contactGroup"/>
 	 </set>   
+	  <subclass name="Entreprise" discriminator-value="E">
+		  <property name="numSiret" type="int" column="numSiret"/>
+	  </subclass>
   </class>
 </hibernate-mapping>

@@ -34,11 +34,15 @@ public class Connection extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		RequestDispatcher rd = request.getRequestDispatcher("pages/accueil.jsp");
-		if (username.equals(password)){
+		if (username=="" || password==""){
+			request.setAttribute("erreur", "Vous devez remplir les deux champs!");
+			request.getRequestDispatcher("pages/index.jsp").forward(request, response);
+		}
+		else if (username.equals(password)){
 			rd.forward(request, response);
 		}
 		else{
-			request.setAttribute("erreur", "Vous devez remplir les deux champs.");
+			request.setAttribute("erreur", "Le nom doit être identique au mot de passe!");
 			request.getRequestDispatcher("pages/index.jsp").forward(request, response);
 		}
 	}

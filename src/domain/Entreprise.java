@@ -8,7 +8,12 @@ public class Entreprise extends Contact{
 		super();
 		numSiret = 0;
 	}
-
+	
+	public Entreprise(String firstName, String lastName, String email, int numSiret){
+		super(firstName,lastName,email);
+		this.numSiret=numSiret;
+	}
+	
 	public int getNumSiret() {
 		return numSiret;
 	}

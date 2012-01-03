@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import util.HibernateUtil;
 
 import domain.Contact;
+import domain.ContactGroup;
 import domain.DAOContact;
 import domain.UnknownContactException;
 
@@ -37,37 +39,6 @@ public class RemoveContact extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-    private synchronized void test(){
-        //Session session = HibernateUtil.getSessionFactory().openSession();
-        //session.beginTransaction();
-        Session session = HibernateUtil.currentSession();/*
-        Contact contact =
-        		(Contact) session.load(Contact.class, new Long(1));
-        
-        		contact.setFirstName("Jacques");
-        		session.save(contact);
-        		*/
-        		List list = session.createQuery("from Contact where firstName like 'Hello'").list();
-        		Iterator it = list.iterator();
-        		while(it.hasNext())
-        		{
-        		  Contact contact = (Contact)it.next();
-        		  System.out.println(contact.getLastName());
-        		}
-        		HibernateUtil.closeSession();
-        		/*
-        String hqlDelete = "delete Contact where id_contact=:tt";
-        Query query=session.createQuery( hqlDelete ).setInteger( "tt",2 );
-        query.executeUpdate();
-        List email = session.createQuery("from Contact"
-                ).list();*/
-        //List courseResult = session.createQuery("select c.courseName from " +
-          //      "Course as c").list();        
-        //session.getTransaction().commit();
-        //System.out.println("la taille est "+email.size());
-    }
-    
-    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -79,12 +50,28 @@ public class RemoveContact extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		daoContact = new DAOContact();
-		test();
-		response.setContentType( "text/html" );
-		PrintWriter out = response.getWriter(); out.println( "<html><body>" );
-		out.println( "<h1> Contact Supprimé </h1>" );
-		out.println( "</body></html>" );
+		try {
+			long id = Long.parseLong(request.getParameter("id"));
+			Session session = HibernateUtil.currentSession();
+			Transaction transaction = session.beginTransaction();
+			Contact contact = (Contact) session.load(Contact.class, id);
+			ContactGroup contactGroup=contact.getBooks().iterator().next();
+	        contact.getBooks().remove(contactGroup);//Le groupe de contact reste
+	        //session.delete(contactGroup);
+	        session.delete(contact.getProfiles().iterator().next());
+	        session.save(contact);
+	        session.delete(contact);
+	        session.delete(contact.getAddress());
+	        transaction.commit();
+	        request.getRequestDispatcher("updateContactSuccess.jsp").forward(request, response);
+			HibernateUtil.closeSession();
+		}
+		catch (Exception e){
+			response.setContentType( "text/html" );
+			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
+			out.println( "<h1> Delete Failed </h1>" );
+			out.println( "</body></html>" );
+		}
 	}
 
 }
