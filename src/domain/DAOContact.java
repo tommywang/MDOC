@@ -53,8 +53,9 @@ public class DAOContact {
 	}
 	
 	public void commit(){
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		Session session = sessionFactory.openSession();
+		//SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		//Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.currentSession();
 		Transaction transaction = session.beginTransaction();
 		session.save(this.address);
 		for (ContactGroup contactGroup : this.contactGroupSet){
@@ -66,7 +67,8 @@ public class DAOContact {
 		session.save(this.contact);
 		session.flush();
 		transaction.commit();
-		session.close();
+		//session.close();
+		HibernateUtil.closeSession();
 	}
 	
 	public Address getAddress() {
