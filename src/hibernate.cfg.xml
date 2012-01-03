@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost/dfj_hibernate</property>
+        <property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!-- ici on configure le comportement lors du lancement d'hibernate -->
+        <!-- valeur = update i..e si les tables de la base n'existent pas 
+        elles sont crees, sinon elles sont MAJ, 
+        la valeur =create i.e. creation à chaque lancement  -->
+        <property name="hbm2ddl.auto">create</property>
+        <!-- mapping files/lien vers les fichiers de mapping -->
+        <mapping resource="domain/Contact.hbm.xml"/>
+		<mapping resource="domain/Address.hbm.xml"/>
+		<mapping resource="domain/PhoneNumber.hbm.xml"/>
+		<mapping resource="domain/ContactGroup.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

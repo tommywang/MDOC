@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>MDOC_BENOIT</display-name>
+	<servlet>
+    <description></description>
+    <display-name>Connection</display-name>
+    <servlet-name>Connection</servlet-name>
+    <servlet-class>servlet.Connection</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Connection</servlet-name>
+    <url-pattern>/Connection</url-pattern>
+  </servlet-mapping>
+	
+  <servlet>
+		<description>servlet AddContact</description>
+		<display-name>AddContact</display-name>
+		<servlet-name>AddContact</servlet-name>
+		<servlet-class>servlet.AddContact</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddContact</servlet-name>
+		<url-pattern>/pages/AddContact</url-pattern>  
+	</servlet-mapping>
+	<servlet>
+		<description>servlet RemoveContact</description>
+		<display-name>RemoveContact</display-name>
+		<servlet-name>RemoveContact</servlet-name>
+		<servlet-class>servlet.RemoveContact</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddContact</servlet-name>
+		<url-pattern>/pages/RemoveContact</url-pattern>  
+	</servlet-mapping>
+	<servlet>
+		<description>servlet UpdateContact</description>
+		<display-name>UpdateContact</display-name>
+		<servlet-name>UpdateContact</servlet-name>
+		<servlet-class>servlet.UpdateContact</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpdateContact</servlet-name>
+		<url-pattern>/pages/UpdateContact</url-pattern>  
+	</servlet-mapping>
+	<servlet>
+		<description>servlet SearchContact</description>
+		<display-name>SearchContact</display-name>
+		<servlet-name>SearchContact</servlet-name>
+		<servlet-class>servlet.AddContact</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearchContact</servlet-name>
+		<url-pattern>/pages/SearchContact</url-pattern>  
+	</servlet-mapping>								
+	<welcome-file-list>
+		<welcome-file>pages/index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
