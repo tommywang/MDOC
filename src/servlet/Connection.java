@@ -37,13 +37,16 @@ public class Connection extends HttpServlet {
 		if (username=="" || password==""){
 			request.setAttribute("erreur", "Vous devez remplir les deux champs!");
 			request.getRequestDispatcher("pages/index.jsp").forward(request, response);
+			//response.sendRedirect("pages/index.jsp");
 		}
 		else if (username.equals(password)){
-			rd.forward(request, response);
+			//rd.forward(request, response);
+			response.sendRedirect("pages/accueil.jsp");
 		}
 		else{
 			request.setAttribute("erreur", "Le nom doit être identique au mot de passe!");
 			request.getRequestDispatcher("pages/index.jsp").forward(request, response);
+			//response.sendRedirect("pages/index.jsp");
 		}
 	}
 

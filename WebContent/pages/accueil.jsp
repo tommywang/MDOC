@@ -16,17 +16,17 @@
 <!-- <p></p> -->
 <!-- <A HREF="updateContact.jsp">Update a contact</A> -->
 <!-- <p></p> -->
-<input type="submit" value="New contact" onclick="javascript:window.location ='pages/addContact.jsp';"/>
+<input type="submit" value="New contact" onclick="javascript:window.location ='addContact.jsp';"/>
 <p></p>
 <!--<input type="submit" value="Remove a contact" onclick="javascript:window.location ='pages/removeContact.jsp';"/>
 <p></p>-->
-<input type="submit" value="Find a contact" onclick="javascript:window.location ='pages/searchContact.jsp';"/>
+<input type="submit" value="Find a contact" onclick="javascript:window.location ='searchContact.jsp';"/>
 <p></p>
 <!--<input type="submit" value="Update a contact" onclick="javascript:window.location ='pages/updateContact.jsp';"/>
 <p></p>-->
 <p></p>
 <p></p>
-<input type="submit" value="Se déconnecter" onclick="javascript:window.location ='pages/index.jsp';"/>
+<input type="submit" value="Se déconnecter" onclick="javascript:window.location ='index.jsp';"/>
 <p></p>
 <!-- <form method="post" action="RemoveContactForward"> -->
 <!-- <input type="submit" value="Remove a contact"> -->

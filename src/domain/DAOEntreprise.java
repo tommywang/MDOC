@@ -2,6 +2,7 @@ package domain;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Session;
@@ -29,11 +30,31 @@ public class DAOEntreprise extends DAOContact {
 	}
 	
 	public void createContactGroupSet(Set<String> groupNameSet){
+		Session session = HibernateUtil.currentSession();
+		Transaction transaction = session.beginTransaction();
+		String hqlSearchGroup="from ContactGroup";
+		List list=session.createQuery(hqlSearchGroup).list();
+		Iterator it = list.iterator();
 		for (String groupName : groupNameSet){
+			boolean existed=false;
+			while(it.hasNext()){
+				//System.out.println(((ContactGroup)it.next()).getGroupName());
+				ContactGroup contactGroup=(ContactGroup)it.next();
+				if (contactGroup.getGroupName().equals(groupName)){
+					existed=true;
+					
+					this.entreprise.addContactGroup(contactGroup);
+					contactGroup.addContact(this.entreprise);
+					this.contactGroupSet.add(contactGroup);
+					break;
+				}
+			}
+			if (!existed){
 			ContactGroup contactGroup = new ContactGroup(groupName);
 			this.entreprise.addContactGroup(contactGroup);
 			contactGroup.addContact(this.entreprise);
 			this.contactGroupSet.add(contactGroup);
+			}
 		}
 	}
 	
@@ -68,6 +89,64 @@ public class DAOEntreprise extends DAOContact {
 		//session.flush();
 		transaction.commit();
 		//session.close();
+		HibernateUtil.closeSession();
+	}
+	
+	public void update(long id, String firstName, String lastName, String email, String street, String city, String zip, String country, 
+			String phoneKind, String phoneNumber, String groupName, int numSiret){
+		
+		Session session = HibernateUtil.currentSession();
+		Transaction transaction = session.beginTransaction();
+		Entreprise entreprise = (Entreprise) session.load(Entreprise.class, id);
+		entreprise.setFirstName(firstName);
+		entreprise.setLastName(lastName);
+		entreprise.setEmail(email);
+		entreprise.setNumSiret(numSiret);
+		Address address=entreprise.getAddress();
+		address.setStreet(street);
+		address.setCity(city);
+		address.setZip(zip);
+		address.setCountry(country);
+		entreprise.getProfiles().iterator().next().setPhoneKind(phoneKind);
+		entreprise.getProfiles().iterator().next().setPhoneNumber(phoneNumber);
+		
+		String hqlSearchGroup="from ContactGroup";
+		List list=session.createQuery(hqlSearchGroup).list();
+		Iterator it = list.iterator();
+		boolean existed=false;
+		while(it.hasNext()){
+			ContactGroup contactGroup=(ContactGroup)it.next();
+			if (contactGroup.getGroupName().equals(groupName)){
+				existed=true;
+				entreprise.getBooks().clear();
+				entreprise.addContactGroup(contactGroup);
+				contactGroup.addContact(this.contact);
+				this.contactGroupSet.add(contactGroup);
+				break;
+			}
+		}
+		if (!existed){
+			ContactGroup contactGroup = new ContactGroup(groupName);
+			entreprise.getBooks().clear();
+			entreprise.addContactGroup(contactGroup);
+			contactGroup.addContact(entreprise);
+			this.contactGroupSet.add(contactGroup);
+		}
+		for (ContactGroup contactGroup : this.contactGroupSet){
+			session.save(contactGroup);
+		}
+
+		//this.contactGroupSet.add(new ContactGroup(groupName));
+		/*
+		Set<String> setGroupName = new HashSet<String>();
+		setGroupName.add(groupName);
+		createContactGroupSet(setGroupName);
+		for (ContactGroup contactGroup : this.contactGroupSet){
+			session.save(contactGroup);
+		}*/
+		session.save(entreprise);
+		transaction.commit();
+
 		HibernateUtil.closeSession();
 	}
 }

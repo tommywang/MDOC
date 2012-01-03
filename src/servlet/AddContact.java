@@ -72,6 +72,7 @@ public class AddContact extends HttpServlet {
 			Set<String> groupNameSet = new HashSet<String>();
 			String groupName = request.getParameter("groupName");
 			groupNameSet.add(groupName);
+			//groupNameSet.add("Travail");
 			
 			if (request.getParameter("numSiret")!=""){
 				System.out.println("passe entyrepreise");

@@ -8,7 +8,7 @@
    		<generator class="increment"/>
   	 </id>
   	 <property name="groupName" type="java.lang.String" column="groupName" />
-	 <set name="contacts" table="gestionContacts" inverse="true">
+	 <set name="contacts" table="gestionContacts" inverse="true" cascade="save-update" >
 		<key column="id_contactGroup"/>
 		<many-to-many class="Contact" column="id_contact"/>
 	 </set>

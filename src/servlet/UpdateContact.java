@@ -1,6 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +15,8 @@ import org.hibernate.Transaction;
 
 import domain.Address;
 import domain.Contact;
+import domain.DAOContact;
+import domain.DAOEntreprise;
 import domain.Entreprise;
 
 import util.HibernateUtil;
@@ -55,10 +60,9 @@ public class UpdateContact extends HttpServlet {
 			String phoneNumber = request.getParameter("phoneNumber");
 			String groupName = request.getParameter("groupName");
 			String numSiret = request.getParameter("numSiret");
-
-			Session session = HibernateUtil.currentSession();
-			Transaction transaction = session.beginTransaction();
+			
 			if (numSiret==""){
+				/*
 				Contact contact = (Contact) session.load(Contact.class, id);
 				//System.out.println(firstName);
 				contact.setFirstName(firstName);
@@ -74,8 +78,26 @@ public class UpdateContact extends HttpServlet {
 				contact.getBooks().iterator().next().setGroupName(groupName);
 
 				session.save(contact);
+				*/
+				/*
+				Set<String> phoneKindSet = new HashSet<String>();
+				Set<String> phoneNumberSet = new HashSet<String>();
+				phoneKindSet.add(phoneKind);
+				phoneNumberSet.add(phoneNumber);
+				Set<String> groupNameSet = new HashSet<String>();
+				groupNameSet.add(groupName);*/
+				DAOContact daoContact=new DAOContact();
+				daoContact.update(id, firstName, lastName, email, street, city, zip, country, phoneKind, phoneNumber, groupName);
+				/*
+				daoContact.createContact(firstName, lastName, email);
+				daoContact.createAdress(street, city, zip, country);
+				daoContact.createPhoneNumberSet(phoneKindSet, phoneNumberSet);
+				daoContact.createContactGroupSet(groupNameSet);
+				daoContact.commit();
+				*/
 			}
 			else{
+				/*
 				Entreprise entreprise = (Entreprise) session.load(Entreprise.class, id);
 				//System.out.println(firstName);
 				entreprise.setFirstName(firstName);
@@ -91,10 +113,29 @@ public class UpdateContact extends HttpServlet {
 				entreprise.getBooks().iterator().next().setGroupName(groupName);
 				entreprise.setNumSiret(Integer.parseInt(numSiret));
 				session.save(entreprise);;
+				*/
+				DAOEntreprise daoEntreprise=new DAOEntreprise();
+				daoEntreprise.update(id, firstName, lastName, email, street, city, zip, country, phoneKind, phoneNumber, groupName, Integer.parseInt(numSiret));
+				/*
+				Set<String> phoneKindSet = new HashSet<String>();
+				Set<String> phoneNumberSet = new HashSet<String>();
+				phoneKindSet.add(phoneKind);
+				phoneNumberSet.add(phoneNumber);
+				Set<String> groupNameSet = new HashSet<String>();
+				groupNameSet.add(groupName);
+				DAOEntreprise daoEntreprise=new DAOEntreprise();
+				daoEntreprise.createEntreprise(firstName, lastName, email, Integer.parseInt(numSiret));
+				daoEntreprise.createAdress(street, city, zip, country);
+				daoEntreprise.createPhoneNumberSet(phoneKindSet, phoneNumberSet);
+				daoEntreprise.createContactGroupSet(groupNameSet);
+				daoEntreprise.commit();
+				*/
 			}
+			request.getRequestDispatcher("updateContactSuccess.jsp").forward(request, response);
+			/*
 			transaction.commit();
 			request.getRequestDispatcher("updateContactSuccess.jsp").forward(request, response);
-			HibernateUtil.closeSession();
+			HibernateUtil.closeSession();*/
 		}
 		catch (Exception e){
 			request.getRequestDispatcher("updateContactError.jsp").forward(request, response);

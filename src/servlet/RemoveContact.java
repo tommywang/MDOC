@@ -52,19 +52,9 @@ public class RemoveContact extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			long id = Long.parseLong(request.getParameter("id"));
-			Session session = HibernateUtil.currentSession();
-			Transaction transaction = session.beginTransaction();
-			Contact contact = (Contact) session.load(Contact.class, id);
-			ContactGroup contactGroup=contact.getBooks().iterator().next();
-	        contact.getBooks().remove(contactGroup);//Le groupe de contact reste
-	        //session.delete(contactGroup);
-	        session.delete(contact.getProfiles().iterator().next());
-	        session.save(contact);
-	        session.delete(contact);
-	        session.delete(contact.getAddress());
-	        transaction.commit();
+			DAOContact daoContact=new DAOContact();
+			daoContact.deleteContact(id);
 	        request.getRequestDispatcher("updateContactSuccess.jsp").forward(request, response);
-			HibernateUtil.closeSession();
 		}
 		catch (Exception e){
 			response.setContentType( "text/html" );
