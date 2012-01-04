@@ -89,69 +89,10 @@ public class DAOContact extends HibernateDaoSupport{
 				this.contactGroupSet.add(contactGroup);
 			}
 		}
-		
-		
-		/*
-			boolean existed=false;
-			while(it.hasNext()){
-				ContactGroup contactGroup=(ContactGroup)it.next();
-				if (contactGroup.getGroupName().equals(groupName)){
-					existed=true||existed;
-
-					this.contact.addContactGroup(contactGroup);
-					contactGroup.addContact(this.contact);
-					//this.contactGroupSet.add(contactGroup);
-					break;
-				}
-			}
-			if (!existed){
-				ContactGroup contactGroup = new ContactGroup(groupName);
-				this.contact.addContactGroup(contactGroup);
-				contactGroup.addContact(this.contact);
-				this.contactGroupSet.add(contactGroup);
-			}
-		}*/
+	
 	}
 
-/*	
-	@Transactional
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void createContactGroupSet(final Set<String> groupNameSet){
 
-		this.hibernateTemplate.execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException{
-				//Session session = HibernateUtil.currentSession();
-				String hqlSearchGroup="from ContactGroup";
-				List list=session.createQuery(hqlSearchGroup).list();
-				Iterator it = list.iterator();
-
-				for (String groupName : groupNameSet){
-					boolean existed=false;
-					while(it.hasNext()){
-						ContactGroup contactGroup=(ContactGroup)it.next();
-						if (contactGroup.getGroupName().equals(groupName)){
-							existed=true;
-
-							contact.addContactGroup(contactGroup);
-							contactGroup.addContact(contact);
-							contactGroupSet.add(contactGroup);
-							break;
-						}
-					}
-					if (!existed){
-						ContactGroup contactGroup = new ContactGroup(groupName);
-						contact.addContactGroup(contactGroup);
-						contactGroup.addContact(contact);
-						contactGroupSet.add(contactGroup);
-					}
-				}
-				return null;
-			}
-		});
-	}
-	
-	*/
-	
 	public void createPhoneNumberSet(Set<String> phoneNumberSet_, Set<String> phoneKindSet){
 		for (Iterator<String> iterator = phoneKindSet.iterator(), iterator2=phoneNumberSet_.iterator(); iterator.hasNext()&&iterator2.hasNext();) {
 			String phoneNumber_ = (String) iterator2.next();
@@ -178,24 +119,7 @@ public class DAOContact extends HibernateDaoSupport{
 		transaction.commit();
 		HibernateUtil.closeSession();
 	}
-/*
-	@Transactional
-	public void commit(){
-		//Session session = HibernateUtil.currentSession();
-		//Transaction transaction = session.beginTransaction();
-		this.getHibernateTemplate().save(this.address);
-		for (ContactGroup contactGroup : this.contactGroupSet){
-			this.getHibernateTemplate().save(contactGroup);
-		}
-		for (PhoneNumber phoneNumber : this.phoneNumberSet){
-			this.getHibernateTemplate().save(phoneNumber);
-		}
-		this.getHibernateTemplate().save(this.contact);
-		//session.flush();
-		//transaction.commit();
-		//HibernateUtil.closeSession();
-	}
-	*/
+
 
 	@Transactional
 	public void commitAddress(){
@@ -321,39 +245,16 @@ public class DAOContact extends HibernateDaoSupport{
 	
 	@Transactional
 	public void deleteContact(long id){
-		//Session session = HibernateUtil.currentSession();
-		//Transaction transaction = session.beginTransaction();
 		Contact contact = (Contact) this.getHibernateTemplate().load(Contact.class, id);
 		ContactGroup contactGroup=contact.getBooks().iterator().next();
 		contact.getBooks().remove(contactGroup);//Le groupe de contact reste
-		//session.delete(contactGroup);
 		this.getHibernateTemplate().delete(contact.getProfiles().iterator().next());
 		this.getHibernateTemplate().save(contact);
 		this.getHibernateTemplate().delete(contact);
 		this.getHibernateTemplate().delete(contact.getAddress());
-		//transaction.commit();
-		//HibernateUtil.closeSession();
 	}
-	
 	
 
-	/*
-	public void deleteContact(long id){
-		Session session = HibernateUtil.currentSession();
-		Transaction transaction = session.beginTransaction();
-		Contact contact = (Contact) session.load(Contact.class, id);
-		ContactGroup contactGroup=contact.getBooks().iterator().next();
-        contact.getBooks().remove(contactGroup);//Le groupe de contact reste
-        //session.delete(contactGroup);
-        session.delete(contact.getProfiles().iterator().next());
-        session.save(contact);
-        session.delete(contact);
-        session.delete(contact.getAddress());
-        transaction.commit();
-        HibernateUtil.closeSession();
-	}
-	*/
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public synchronized Contact searchContactByName(final String firstName, final String lastName){
 		System.out.println("firstName = "+ firstName + " and lastName = " + lastName);
@@ -378,28 +279,7 @@ public class DAOContact extends HibernateDaoSupport{
 		});
 		return contactTmp;
 	}
-	
-	/*
-	public synchronized Contact searchContactByName(String firstName, String lastName){
-		Session session = HibernateUtil.currentSession();
-		//HQL from ..join
-		String hqlSearch="select c from Contact as c left join fetch c.address a "
-				+ "left join fetch c.profiles p "
-				+ "left join fetch c.books b "
-				+ "where firstName like :firstName and lastName like :lastName";
-		List list = session.createQuery(hqlSearch).setString("firstName", firstName).setString("lastName", lastName).list();
-		Iterator it = list.iterator();
-		HibernateUtil.closeSession();
-		if (it.hasNext()){
-			Contact contact = (Contact)it.next();
-			//System.out.println(contact.getLastName());	
-			return contact;
-		}
-		else{
-			return null;
-		}
-	}
-	*/
+
 	@Transactional
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public  Contact searchContactById(final long id){
@@ -415,48 +295,11 @@ public class DAOContact extends HibernateDaoSupport{
 		Contact contact = (Contact) session.createCriteria(Contact.class).
 				add(Restrictions.like("id_contact", id)).uniqueResult();
 		return contact;
-		
-		/*
-		Contact contactTmp = (Contact)this.hibernateTemplate.execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException{
-				Contact contact = (Contact) session.createCriteria(Contact.class).
-						add(Restrictions.like("id_contact", id)).uniqueResult();
-				return contact;
-			}
-		});
-		return contactTmp;
-		*/
-		
-	}
-	
-	/*
-	@Transactional
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public synchronized Set<Contact> searchContacts(final String firstName,final String lastName,final int numResult){
-		Set<Contact> contactSet = (Set<Contact>)this.hibernateTemplate.execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException{
-			Set<Contact> contacts=new HashSet<Contact>();
-			String mFirstName=firstName+"%";
-			String mLastName=lastName+"%";
-			List list =session.createCriteria(Contact.class).
-					add(Restrictions.like("firstName", mFirstName)).
-					add(Restrictions.like("lastName", mLastName)).
-					setMaxResults(numResult).list();
-			Iterator it = list.iterator();
-			while(it.hasNext()){
-				contacts.add((Contact)it.next());
-			}
-			return contacts;
-			}
-			
-		});
-		return contactSet;
+		
 	}
-	*/
 	
-	
-	
+
 	public  Set<Contact> searchContacts(final String firstName,final String lastName,final int numResult){
 		Session session = HibernateUtil.currentSession();
 			Set<Contact> contacts=new HashSet<Contact>();

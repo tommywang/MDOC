@@ -52,11 +52,9 @@ public class AddContact extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try{
-			//		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 			daoEntreprise=new DAOEntreprise();
 
 			daoContact = new DAOContact();
-			//		this.daoContact = (DAOContact)context.getBean("beanDAOContact");		
 			String firstName = request.getParameter("firstName");
 			String lastName = request.getParameter("lastName");
 			String email = request.getParameter("email");

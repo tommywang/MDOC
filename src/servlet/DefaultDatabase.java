@@ -48,8 +48,8 @@ public class DefaultDatabase extends HttpServlet {
 			this.daoContact = (DAOContact)context.getBean("beanDAOContact");
 			this.daoContact.springSetterWay(context); //on présuppose la base vide à ce moment
 			this.daoContact.commit();
-			this.daoContact.springConstructorWay(context);
-			this.daoContact.commitAddress();
+			//this.daoContact.springConstructorWay(context);
+			//this.daoContact.commitAddress();
 			//response.sendRedirect("pages/accueil.jsp");
 			response.setContentType( "text/html" );
 			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
