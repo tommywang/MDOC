@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+	<!-- Coupling Spring & Hibernate -->
+	
+	<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost/dfj_hibernate"/>
+		<property name="username" value="root"/>
+		<property name="password" value="root"/>
+	</bean>
+	
+	<bean id="mySessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource"/>
+		<property name="mappingResources">
+			<list>
+				<value>domain/Contact.hbm.xml</value>
+				<value>domain/Address.hbm.xml</value>
+				<value>domain/PhoneNumber.hbm.xml</value>
+				<value>domain/ContactGroup.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="beanDAOContact" class="domain.DAOContact">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	<bean id="beanDAOEntreprise" class="domain.DAOEntreprise">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="mySessionFactory"/>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<tx:advice id="txAdvice">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" timeout="-1" />
+			<tx:method name="sav*" propagation="REQUIRED" />
+			<tx:method name="search*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor pointcut="execution(* domain.*.*(..))" advice-ref="txAdvice"/>
+	</aop:config>
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<!-- Setters Way -->
+	
+	<bean id="beanContact" class="domain.Contact">
+		<property name="firstName" value="benoit"/>
+		<property name="lastName" value="goepfert"/>
+		<property name="email" value="goepfert.benoit@gmail.com"/>
+		<property name="address">
+			<ref bean="beanAddress"/>
+		</property>
+		<property name="profiles">
+			<set>
+				<ref bean="beanPhoneNumber1"/>
+				<ref bean="beanPhoneNumber2"/>
+			</set>
+		</property>
+		<property name="books">
+			<set>
+				<ref bean="beanContactGroup1"/>
+				<ref bean="beanContactGroup2"/>
+			</set>
+		</property>
+	</bean>
+	<bean id="beanAddress" class="domain.Address">
+		<property name="street" value="my street"/>
+		<property name="zip" value="78300"/>
+		<property name="city" value="Poissy"/>
+		<property name="country" value="France"/>
+	</bean>
+	<bean id="beanPhoneNumber1" class="domain.PhoneNumber">
+		<property name="phoneNumber" value="0611223344"/>
+		<property name="phoneKind" value="MOBILE"/>
+		<property name="contact">
+			<ref bean="beanContact"/>
+		</property>
+	</bean>
+	<bean id="beanPhoneNumber2" class="domain.PhoneNumber">
+		<property name="phoneNumber" value="0155667788"/>
+		<property name="phoneKind" value="MAISON"/>
+		<property name="contact">
+			<ref bean="beanContact"/>
+		</property>
+	</bean>
+	<bean id="beanContactGroup1" class="domain.ContactGroup">
+		<property name="groupName" value="api"/>
+		<property name="contactSet">
+			<set>
+				<ref bean="beanContact"/>
+			</set>
+		</property>
+	</bean>
+		<bean id="beanContactGroup2" class="domain.ContactGroup">
+		<property name="groupName" value="AS Poissy"/>
+		<property name="contactSet">
+			<set>
+				<ref bean="beanContact"/>
+			</set>
+		</property>
+	</bean>
+	
+	<!-- Constructor Way -->
+	
+	<bean id="beanAddress2" class="domain.Address">
+		<constructor-arg type="String"><value>champs elysees</value></constructor-arg>
+		<constructor-arg type="String"><value>75005</value></constructor-arg>
+		<constructor-arg type="String"><value>Paris</value></constructor-arg>
+		<constructor-arg type="String"><value>France</value></constructor-arg>
+	</bean>
+</beans>

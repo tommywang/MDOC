@@ -59,6 +59,8 @@ public class SearchContacts extends HttpServlet {
 			response.setContentType( "text/html" );
 			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
 			out.println( "<h1> Contact Not Found </h1>" );
+			out.println("<input type=\"submit\" value=\"retour ˆ l'accueil\" onclick=\"javascript:window.location ='accueil.jsp';\"/>");
+
 			out.println( "</body></html>" );
 		}
 		else{

@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import util.HibernateUtil;
 
@@ -27,6 +30,7 @@ import domain.UnknownContactException;
 @WebServlet("/SearchContact")
 public class SearchContactByName extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	DAOContact daoContact;
 	long cpt = 0;
 
 	/**
@@ -47,6 +51,8 @@ public class SearchContactByName extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	
+	/*
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -56,7 +62,53 @@ public class SearchContactByName extends HttpServlet {
 			response.setContentType( "text/html" );
 			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
 			out.println( "<h1> Contact Not Found </h1>" );
+			out.println("<input type=\"submit\" value=\"retour ˆ l'accueil\" onclick=\"javascript:window.location ='accueil.jsp';\"/>");
+
 			out.println( "</body></html>" );
+		}
+		else{
+			//ystem.out.println(contact.getLastName());
+			request.setAttribute("id", contact.getId_contact());
+			request.setAttribute("firstName", contact.getFirstName());
+			request.setAttribute("lastName", contact.getLastName());
+			request.setAttribute("email", contact.getEmail());
+			request.setAttribute("street", contact.getAddress().getStreet());
+			request.setAttribute("zip", contact.getAddress().getZip());
+			request.setAttribute("city", contact.getAddress().getCity());
+			request.setAttribute("country", contact.getAddress().getCountry());
+			request.setAttribute("phoneNumber", contact.getProfiles().iterator().next().getPhoneNumber());
+			request.setAttribute("groupName", contact.getBooks().iterator().next().getGroupName());
+			//try{
+				//if (((Entreprise)contact).getNumSiret()!=0)
+				if (contact instanceof Entreprise){
+					request.setAttribute("numSiret", ((Entreprise)contact).getNumSiret());
+					request.getRequestDispatcher("SearchResultEntreprise.jsp").forward(request, response);
+				}
+			//}
+			//catch (Exception e){
+				else{
+					request.setAttribute("numSiret", "");
+					request.getRequestDispatcher("SearchResultContact.jsp").forward(request, response);
+				}
+			//}
+			
+		}
+	}
+*/
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		this.daoContact = (DAOContact)context.getBean("beanDAOContact");
+		this.daoContact.setHibernateTemplate(sessionFactory);
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		Contact contact=this.daoContact.searchContactByName(firstName, lastName);
+		if (contact==null){
+			response.sendRedirect("contactNotFound.jsp");
+//			response.setContentType( "text/html" );
+//			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
+//			out.println( "<h1> Contact Not Found </h1>" );
+//			out.println( "</body></html>" );
 		}
 		else{
 			//ystem.out.println(contact.getLastName());

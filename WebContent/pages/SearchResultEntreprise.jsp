@@ -12,7 +12,7 @@
 		<table frame="border" cellpadding="1">
 				<tr>
 					<td align="right">ID:</td> 
-					<td align="left"><input type="text" name="id" size="25" value="<%= (String)request.getAttribute("id").toString() %>"></td>
+					<td align="left"><input type="text" name="id" size="25" readonly="readonly" value="<%= (String)request.getAttribute("id").toString() %>"></td>
 				</tr>
 				<tr>
 					<td align="right">First Name*:</td>

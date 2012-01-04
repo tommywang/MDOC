@@ -2,39 +2,47 @@ package domain;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Entity;
 
+@Entity
 public class ContactGroup {
 	private long id_contactGroup;
 	private String groupName;
-	Set<Contact> contacts;
+	Set<Contact> contactSet;
 	
 	public ContactGroup(){
 		this.id_contactGroup = 0;
 		this.groupName = null;
-		this.contacts = null;
+		this.contactSet = null;
 	}
 	
 	public ContactGroup(String groupName){
 		this.id_contactGroup = 0;
 		this.groupName = groupName;
-		this.contacts = new HashSet<Contact>();
+		this.contactSet = new HashSet<Contact>();
+	}
+	
+	public ContactGroup(String groupName, Set<Contact> contactSet){
+		this.id_contactGroup = 0;
+		this.groupName = groupName;
+		this.contactSet = contactSet;
 	}
 	
 	public void setUpContactGroup(String groupName){
 		this.groupName = groupName;
-		this.contacts = new HashSet<Contact>();
+		this.contactSet = new HashSet<Contact>();
 	}
 	
 	public void addContact(Contact contact){
-		this.contacts.add(contact);
+		this.contactSet.add(contact);
 	}
 	
-	public Set<Contact> getContacts(){
-		return this.contacts;
+	public Set<Contact> getContactSet(){
+		return this.contactSet;
 	}
 	
-	public void setContacts(Set<Contact> contacts){
-		this.contacts = contacts;
+	public void setContactSet(Set<Contact> contactSet){
+		this.contactSet = contactSet;
 	}
 	
 	public long getId_contactGroup(){

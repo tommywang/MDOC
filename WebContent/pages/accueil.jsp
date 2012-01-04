@@ -30,7 +30,14 @@
 <p></p>-->
 <p></p>
 <p></p>
-<input type="submit" value="Se déconnecter" onclick="javascript:window.location ='index.jsp';"/>
+<h3>Ajout par défaut dans la base avec Spring</h3>
+<form method="post" action="../DefaultDatabase">
+<input type="submit" value="Add default data in the database">
+</form>
+<form method="post" action="../Disconnect">
+<input type="submit" value="Disconnect">
+</form>
+<!--<input type="submit" value="Se déconnecter" onclick="javascript:window.location ='index.jsp';"/>-->
 <p></p>
 <!-- <form method="post" action="RemoveContactForward"> -->
 <!-- <input type="submit" value="Remove a contact"> -->

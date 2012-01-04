@@ -32,6 +32,15 @@ public class Contact {
 		this.books = new HashSet<ContactGroup>();
 	}
 
+	public Contact(String firstName, String lastName, String email, Address address, Set<PhoneNumber> phoneNumberSet, Set<ContactGroup> contactGroupSet){
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.address = address;
+		this.profiles = phoneNumberSet;
+		this.books = contactGroupSet;
+	}
+	
 	public void setUpContact(String firstName, String lastName, String email){
 		this.firstName = firstName;
 		this.lastName = lastName;
