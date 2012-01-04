@@ -12,6 +12,20 @@
 		</listener-class>
   </listener>
 	
+	 <filter>
+        <filter-name>hibernateFilter</filter-name>
+        <filter-class>
+           org.springframework.orm.hibernate3.support.OpenSessionInViewFilter
+        </filter-class>
+    </filter>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/applicationContext.xml
+		</param-value>
+	</context-param>
+	
 	<servlet>
     <description></description>
     <display-name>Disconnect</display-name>

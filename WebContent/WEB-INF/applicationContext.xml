@@ -60,7 +60,7 @@
 	
 	<!-- Setters Way -->
 	
-	<bean id="beanContact" class="domain.Contact">
+	<bean id="beanContact" class="domain.Contact" >
 		<property name="firstName" value="benoit"/>
 		<property name="lastName" value="goepfert"/>
 		<property name="email" value="goepfert.benoit@gmail.com"/>
@@ -70,13 +70,11 @@
 		<property name="profiles">
 			<set>
 				<ref bean="beanPhoneNumber1"/>
-				<ref bean="beanPhoneNumber2"/>
 			</set>
 		</property>
 		<property name="books">
 			<set>
 				<ref bean="beanContactGroup1"/>
-				<ref bean="beanContactGroup2"/>
 			</set>
 		</property>
 	</bean>
@@ -93,13 +91,7 @@
 			<ref bean="beanContact"/>
 		</property>
 	</bean>
-	<bean id="beanPhoneNumber2" class="domain.PhoneNumber">
-		<property name="phoneNumber" value="0155667788"/>
-		<property name="phoneKind" value="MAISON"/>
-		<property name="contact">
-			<ref bean="beanContact"/>
-		</property>
-	</bean>
+	
 	<bean id="beanContactGroup1" class="domain.ContactGroup">
 		<property name="groupName" value="api"/>
 		<property name="contactSet">
@@ -108,21 +100,5 @@
 			</set>
 		</property>
 	</bean>
-		<bean id="beanContactGroup2" class="domain.ContactGroup">
-		<property name="groupName" value="AS Poissy"/>
-		<property name="contactSet">
-			<set>
-				<ref bean="beanContact"/>
-			</set>
-		</property>
-	</bean>
-	
-	<!-- Constructor Way -->
-	
-	<bean id="beanAddress2" class="domain.Address">
-		<constructor-arg type="String"><value>champs elysees</value></constructor-arg>
-		<constructor-arg type="String"><value>75005</value></constructor-arg>
-		<constructor-arg type="String"><value>Paris</value></constructor-arg>
-		<constructor-arg type="String"><value>France</value></constructor-arg>
-	</bean>
+
 </beans>

@@ -3,36 +3,29 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import util.HibernateUtil;
 
-import domain.Address;
 import domain.Contact;
 import domain.ContactGroup;
 import domain.DAOContact;
 import domain.Entreprise;
-import domain.UnknownContactException;
 
 /**
  * Servlet implementation class SearchContact
  */
-@WebServlet("/SearchContact")
+@WebServlet("/SearchContacts")
 public class SearchContacts extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	long cpt = 0;
@@ -102,7 +95,6 @@ public class SearchContacts extends HttpServlet {
 				out.println("<td>"+groups+"</td>"+"");
 				if (contact instanceof Entreprise)
 				out.println("<td>"+((Entreprise)contact).getNumSiret()+"</td>"+"");
-				//System.out.println(contact.getFirstName());
 				out.println("</tr>");
 			}
 			

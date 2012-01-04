@@ -19,6 +19,12 @@ public class PhoneNumber {
 		this.contact = null;
 	}
 	
+	public PhoneNumber(String phoneNumber, String phoneKind, Contact contact) {
+		this.phoneNumber = phoneNumber;
+		this.phoneKind = phoneKind;
+		this.contact = contact;
+	}
+	
 	public void setUpPhoneNumber(String phoneNumber, String phoneKind){
 		this.phoneNumber = phoneNumber;
 		this.phoneKind = phoneKind;

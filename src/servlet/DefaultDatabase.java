@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import util.HibernateUtil;
+
 import domain.DAOContact;
 import domain.DAOEntreprise;
 
@@ -21,15 +23,15 @@ public class DefaultDatabase extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOContact daoContact;
 	DAOEntreprise daoEntreprise;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DefaultDatabase() {
-        super();
-        this.daoContact = null;
-        this.daoEntreprise = null;
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public DefaultDatabase() {
+		super();
+		this.daoContact = null;
+		this.daoEntreprise = null;
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -44,13 +46,9 @@ public class DefaultDatabase extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
 			ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-			this.daoEntreprise = (DAOEntreprise)context.getBean("beanDAOEntreprise");
-			this.daoContact = (DAOContact)context.getBean("beanDAOContact");
-			this.daoContact.springSetterWay(context); //on présuppose la base vide à ce moment
-			this.daoContact.commit();
-			//this.daoContact.springConstructorWay(context);
-			//this.daoContact.commitAddress();
-			//response.sendRedirect("pages/accueil.jsp");
+			DAOContact daoContact = (DAOContact)context.getBean("beanDAOContact");
+			daoContact.springSetterWay(context);
+			HibernateUtil.closeSession();
 			response.setContentType( "text/html" );
 			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
 			out.println( "<h1> Contact Added </h1>" );

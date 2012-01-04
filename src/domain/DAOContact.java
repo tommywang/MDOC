@@ -37,8 +37,6 @@ public class DAOContact extends HibernateDaoSupport{
 		this.phoneNumberSet = new HashSet<PhoneNumber>();
 	}
 
-	
-	
 	public void setHibernateTemplate(SessionFactory sessionFactory){
 		this.hibernateTemplate = new HibernateTemplate(sessionFactory);
 	}
@@ -66,7 +64,6 @@ public class DAOContact extends HibernateDaoSupport{
 	}
 	
 	public void createContactGroupSet(Set<String> groupNameSet){
-
 		Session session = HibernateUtil.currentSession();
 		String hqlSearchGroup="from ContactGroup";
 		List list=session.createQuery(hqlSearchGroup).list();
@@ -92,7 +89,6 @@ public class DAOContact extends HibernateDaoSupport{
 	
 	}
 
-
 	public void createPhoneNumberSet(Set<String> phoneNumberSet_, Set<String> phoneKindSet){
 		for (Iterator<String> iterator = phoneKindSet.iterator(), iterator2=phoneNumberSet_.iterator(); iterator.hasNext()&&iterator2.hasNext();) {
 			String phoneNumber_ = (String) iterator2.next();
@@ -104,6 +100,7 @@ public class DAOContact extends HibernateDaoSupport{
 		}
 	}
 
+	//Add in the database
 	public void commit(){
 		Session session = HibernateUtil.currentSession();
 		Transaction transaction = session.beginTransaction();
@@ -120,16 +117,7 @@ public class DAOContact extends HibernateDaoSupport{
 		HibernateUtil.closeSession();
 	}
 
-
-	@Transactional
-	public void commitAddress(){
-		//Session session = HibernateUtil.currentSession();
-		//Transaction transaction = session.beginTransaction();
-		this.getHibernateTemplate().save(this.address);
-		//transaction.commit();
-		//HibernateUtil.closeSession();
-	}
-	
+	//Update a contact
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Transactional
 	public void update(final long id, final String firstName, final String lastName, final String email, 
@@ -137,7 +125,6 @@ public class DAOContact extends HibernateDaoSupport{
 			final String phoneKind, final String phoneNumber, final String groupName){
 		this.hibernateTemplate.execute(new HibernateCallback() {
 			public Object doInHibernate(Session session) throws HibernateException{
-				//Session session = HibernateUtil.currentSession();
 				Transaction transaction = session.beginTransaction();
 				Contact contact = (Contact) session.load(Contact.class, id);
 				contact.setFirstName(firstName);
@@ -151,14 +138,7 @@ public class DAOContact extends HibernateDaoSupport{
 				contact.getProfiles().iterator().next().setPhoneKind(phoneKind);
 				contact.getProfiles().iterator().next().setPhoneNumber(phoneNumber);
 
-				/*
-				Set<String> groupNameSet=new HashSet<String>();
-				groupNameSet.add(groupName);
-				groupNameSet.add(groupName1);
-				createContactGroupSet(groupNameSet);
-				*/
-				
-				String hqlSearchGroup="from ContactGroup";
+				String hqlSearchGroup="from ContactGroup";//return all contact groups from the database
 				List list=session.createQuery(hqlSearchGroup).list();
 				Iterator it = list.iterator();
 				boolean existed=false;
@@ -169,17 +149,17 @@ public class DAOContact extends HibernateDaoSupport{
 						contact.getBooks().clear();
 						contact.addContactGroup(contactGroup);
 						contactGroup.addContact(contact);
-						contactGroupSet.add(contactGroup);
+						//contactGroupSet.add(contactGroup);
 						break;
 					}
 				}
 				
 				if (!existed){
 					ContactGroup contactGroup = new ContactGroup(groupName);
-					//contact.getBooks().clear();
+					contact.getBooks().clear();
 					contact.addContactGroup(contactGroup);
 					contactGroup.addContact(contact);
-					contactGroupSet.add(contactGroup);
+					contactGroupSet.add(contactGroup);//add the new contact group in the database
 				}
 				
 				for (ContactGroup contactGroup : contactGroupSet){
@@ -193,71 +173,23 @@ public class DAOContact extends HibernateDaoSupport{
 			}
 		});
 	}
-	/*
-	public void update(long id, String firstName, String lastName, String email, String street, String city, String zip, String country, 
-			String phoneKind, String phoneNumber, String groupName){
-		
-		Session session = HibernateUtil.currentSession();
-		Transaction transaction = session.beginTransaction();
-		Contact contact = (Contact) session.load(Contact.class, id);
-		contact.setFirstName(firstName);
-		contact.setLastName(lastName);
-		contact.setEmail(email);
-		Address address=contact.getAddress();
-		address.setStreet(street);
-		address.setCity(city);
-		address.setZip(zip);
-		address.setCountry(country);
-		contact.getProfiles().iterator().next().setPhoneKind(phoneKind);
-		contact.getProfiles().iterator().next().setPhoneNumber(phoneNumber);
-		
-		String hqlSearchGroup="from ContactGroup";
-		List list=session.createQuery(hqlSearchGroup).list();
-		Iterator it = list.iterator();
-		boolean existed=false;
-		while(it.hasNext()){
-			ContactGroup contactGroup=(ContactGroup)it.next();
-			if (contactGroup.getGroupName().equals(groupName)){
-				existed=true;
-				contact.getBooks().clear();
-				contact.addContactGroup(contactGroup);
-				contactGroup.addContact(this.contact);
-				this.contactGroupSet.add(contactGroup);
-				break;
-			}
-		}
-		if (!existed){
-			ContactGroup contactGroup = new ContactGroup(groupName);
-			contact.getBooks().clear();
-			contact.addContactGroup(contactGroup);
-			contactGroup.addContact(contact);
-			this.contactGroupSet.add(contactGroup);
-		}
-		for (ContactGroup contactGroup : this.contactGroupSet){
-			session.save(contactGroup);
-		}
-		session.save(contact);
-		transaction.commit();
-
-		HibernateUtil.closeSession();
-	}
-*/
 	
+	//Supprimer un contact par son id
 	@Transactional
 	public void deleteContact(long id){
 		Contact contact = (Contact) this.getHibernateTemplate().load(Contact.class, id);
 		ContactGroup contactGroup=contact.getBooks().iterator().next();
-		contact.getBooks().remove(contactGroup);//Le groupe de contact reste
+		contact.getBooks().remove(contactGroup);
 		this.getHibernateTemplate().delete(contact.getProfiles().iterator().next());
 		this.getHibernateTemplate().save(contact);
 		this.getHibernateTemplate().delete(contact);
 		this.getHibernateTemplate().delete(contact.getAddress());
 	}
 	
-
+	//Recherche un contact avec son nom et son prénom, on suppose qu'il n'y aurait pas de doublon
+	@Transactional
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public synchronized Contact searchContactByName(final String firstName, final String lastName){
-		System.out.println("firstName = "+ firstName + " and lastName = " + lastName);
 		Contact contactTmp = (Contact)this.hibernateTemplate.execute(new HibernateCallback() {
 			public Object doInHibernate(Session session) throws HibernateException{
 				String hqlSearch="select c from Contact as c left join fetch c.address a "
@@ -275,31 +207,31 @@ public class DAOContact extends HibernateDaoSupport{
 				else{
 					return null;
 				}
+				
+				/*HQL with example
+				 * 
+				Contact contactExample=new Contact();
+				contactExample.setFirstName(firstName);
+				contactExample.setLastName(lastName);
+				Contact contact = (Contact) session.createCriteria(Contact.class).
+						add(Example.create(contactExample)).uniqueResult();
+						return contact;
+				*/
 			}
 		});
 		return contactTmp;
 	}
-
-	@Transactional
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	//Recherche un contact par son id
 	public  Contact searchContactById(final long id){
-		/*
-		contactExample.setFirstName("Hello");
-		contactExample.setLastName("Titi");
-		Contact contact = (Contact) session.createCriteria(Contact.class).
-				add(Example.create(contactExample)).uniqueResult();*/
-		
-		
 		//HQL Criteria simple
 		Session session = HibernateUtil.currentSession();
 		Contact contact = (Contact) session.createCriteria(Contact.class).
 				add(Restrictions.like("id_contact", id)).uniqueResult();
 		return contact;
-
-		
 	}
 	
-
+	//Recherche plusieurs contacts
 	public  Set<Contact> searchContacts(final String firstName,final String lastName,final int numResult){
 		Session session = HibernateUtil.currentSession();
 			Set<Contact> contacts=new HashSet<Contact>();
@@ -316,37 +248,41 @@ public class DAOContact extends HibernateDaoSupport{
 			return contacts;
 	}
 	
+	//Dependency Injection with setter way
 	public void springSetterWay(ApplicationContext context){
-		this.contact = (Contact)context.getBean("beanContact");
+		Contact contact = (Contact)context.getBean("beanContact");
 
-		this.address = (Address)context.getBean("beanAddress");
-		this.contact.addAddress(this.address);
+		Address address = (Address)context.getBean("beanAddress");
+		contact.addAddress(address);
 
 		ContactGroup contactGroup1 = (ContactGroup)context.getBean("beanContactGroup1");
-		this.contact.addContactGroup(contactGroup1);
-		contactGroup1.addContact(this.contact);
-		this.contactGroupSet.add(contactGroup1);
-
-		ContactGroup contactGroup2 = (ContactGroup)context.getBean("beanContactGroup2");
-		this.contact.addContactGroup(contactGroup2);
-		contactGroup2.addContact(this.contact);
-		this.contactGroupSet.add(contactGroup2);
+		contact.addContactGroup(contactGroup1);
+		contactGroup1.addContact(contact);
+		Set<ContactGroup> contactGroupSet=new HashSet<ContactGroup>();
+		contactGroupSet.add(contactGroup1);
 
 		PhoneNumber phoneNumber1 = (PhoneNumber)context.getBean("beanPhoneNumber1");
-		this.contact.addPhoneNumber(phoneNumber1);
+		contact.addPhoneNumber(phoneNumber1);
 		phoneNumber1.setContact(contact);
-		this.phoneNumberSet.add(phoneNumber1);
-
-		PhoneNumber phoneNumber2 = (PhoneNumber)context.getBean("beanPhoneNumber2");
-		this.contact.addPhoneNumber(phoneNumber2);
-		phoneNumber2.setContact(contact);
-		this.phoneNumberSet.add(phoneNumber2);
-	}
-
-	public void springConstructorWay(ApplicationContext context){
-		this.address = (Address)context.getBean("beanAddress2");		
+		Set<PhoneNumber> phoneNumberSet=new HashSet<PhoneNumber>();
+		phoneNumberSet.add(phoneNumber1);
+		
+		Session session = HibernateUtil.currentSession();
+		Transaction transaction = session.beginTransaction();
+		session.save(address);
+		for (ContactGroup contactGroup : contactGroupSet){
+			session.save(contactGroup);
+		}
+		for (PhoneNumber phoneNumber : phoneNumberSet){
+			session.save(phoneNumber);
+		}
+		session.save(contact);
+		session.flush();
+		transaction.commit();
+		HibernateUtil.closeSession();
 	}
 	
+
 	public Address getAddress() {
 		return address;
 	}

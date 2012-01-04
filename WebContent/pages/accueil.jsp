@@ -30,7 +30,7 @@
 <p></p>-->
 <p></p>
 <p></p>
-<h3>Ajout par défaut dans la base avec Spring</h3>
+<h3>Dependency Injection with setter way</h3>
 <form method="post" action="../DefaultDatabase">
 <input type="submit" value="Add default data in the database">
 </form>

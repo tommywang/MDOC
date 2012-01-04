@@ -50,13 +50,17 @@
 					<td align="right">PhoneNumber*: </td>
 					<td align="left"><input type="text" name="phoneNumber" size="25" value="0123456789"></td>
 				</tr>
+				<tr><td align="left" colspan="2"><strong>Enter a known group or a new name to create a contact group:</strong></td></tr>
 				<tr>
 					<td align="right">Group Name*:</td> 
 					<td align="left"><input type="text" name="groupName" size="25" value="AMIS"></td>
+					
 				</tr>
+				<tr><td align="left" colspan="2"><strong>Fill this field, if you are adding a contact for a enterprise:</strong></td></tr>
 				<tr>
 					<td align="right">Siret Number:</td>
-					<td align="left"> <input type="text" name="numSiret" size="25" value="8888"></td>
+					<td align="left"> <input type="text" name="numSiret" size="25"></td>
+					
 				</tr>
 		</table>
 		<input type="submit" value="Submit"> <input type="reset" value="Reset" >
