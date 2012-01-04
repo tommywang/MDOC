@@ -5,14 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -40,7 +36,7 @@ public class DAOContact extends HibernateDaoSupport{
 	public void setHibernateTemplate(SessionFactory sessionFactory){
 		this.hibernateTemplate = new HibernateTemplate(sessionFactory);
 	}
-	
+
 	public void createContact(String firstName, String lastName, String email){
 		this.contact = new Contact(firstName, lastName, email);
 	}	
@@ -62,7 +58,7 @@ public class DAOContact extends HibernateDaoSupport{
 		}
 		return null;
 	}
-	
+
 	public void createContactGroupSet(Set<String> groupNameSet){
 		Session session = HibernateUtil.currentSession();
 		String hqlSearchGroup="from ContactGroup";
@@ -86,7 +82,7 @@ public class DAOContact extends HibernateDaoSupport{
 				this.contactGroupSet.add(contactGroup);
 			}
 		}
-	
+
 	}
 
 	public void createPhoneNumberSet(Set<String> phoneNumberSet_, Set<String> phoneKindSet){
@@ -153,7 +149,7 @@ public class DAOContact extends HibernateDaoSupport{
 						break;
 					}
 				}
-				
+
 				if (!existed){
 					ContactGroup contactGroup = new ContactGroup(groupName);
 					contact.getBooks().clear();
@@ -161,7 +157,7 @@ public class DAOContact extends HibernateDaoSupport{
 					contactGroup.addContact(contact);
 					contactGroupSet.add(contactGroup);//add the new contact group in the database
 				}
-				
+
 				for (ContactGroup contactGroup : contactGroupSet){
 					session.save(contactGroup);
 				}
@@ -173,7 +169,7 @@ public class DAOContact extends HibernateDaoSupport{
 			}
 		});
 	}
-	
+
 	//Supprimer un contact par son id
 	@Transactional
 	public void deleteContact(long id){
@@ -185,7 +181,7 @@ public class DAOContact extends HibernateDaoSupport{
 		this.getHibernateTemplate().delete(contact);
 		this.getHibernateTemplate().delete(contact.getAddress());
 	}
-	
+
 	//Recherche un contact avec son nom et son prénom, on suppose qu'il n'y aurait pas de doublon
 	@Transactional
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -207,7 +203,7 @@ public class DAOContact extends HibernateDaoSupport{
 				else{
 					return null;
 				}
-				
+
 				/*HQL with example
 				 * 
 				Contact contactExample=new Contact();
@@ -216,12 +212,12 @@ public class DAOContact extends HibernateDaoSupport{
 				Contact contact = (Contact) session.createCriteria(Contact.class).
 						add(Example.create(contactExample)).uniqueResult();
 						return contact;
-				*/
+				 */
 			}
 		});
 		return contactTmp;
 	}
-	
+
 	//Recherche un contact par son id
 	public  Contact searchContactById(final long id){
 		//HQL Criteria simple
@@ -230,24 +226,24 @@ public class DAOContact extends HibernateDaoSupport{
 				add(Restrictions.like("id_contact", id)).uniqueResult();
 		return contact;
 	}
-	
+
 	//Recherche plusieurs contacts
 	public  Set<Contact> searchContacts(final String firstName,final String lastName,final int numResult){
 		Session session = HibernateUtil.currentSession();
-			Set<Contact> contacts=new HashSet<Contact>();
-			String mFirstName=firstName+"%";
-			String mLastName=lastName+"%";
-			List list =session.createCriteria(Contact.class).
-					add(Restrictions.like("firstName", mFirstName)).
-					add(Restrictions.like("lastName", mLastName)).
-					setMaxResults(numResult).list();
-			Iterator it = list.iterator();
-			while(it.hasNext()){
-				contacts.add((Contact)it.next());
-			}
-			return contacts;
+		Set<Contact> contacts=new HashSet<Contact>();
+		String mFirstName=firstName+"%";
+		String mLastName=lastName+"%";
+		List list =session.createCriteria(Contact.class).
+				add(Restrictions.like("firstName", mFirstName)).
+				add(Restrictions.like("lastName", mLastName)).
+				setMaxResults(numResult).list();
+		Iterator it = list.iterator();
+		while(it.hasNext()){
+			contacts.add((Contact)it.next());
+		}
+		return contacts;
 	}
-	
+
 	//Dependency Injection with setter way
 	public void springSetterWay(ApplicationContext context){
 		Contact contact = (Contact)context.getBean("beanContact");
@@ -266,7 +262,7 @@ public class DAOContact extends HibernateDaoSupport{
 		phoneNumber1.setContact(contact);
 		Set<PhoneNumber> phoneNumberSet=new HashSet<PhoneNumber>();
 		phoneNumberSet.add(phoneNumber1);
-		
+
 		Session session = HibernateUtil.currentSession();
 		Transaction transaction = session.beginTransaction();
 		session.save(address);
@@ -281,7 +277,7 @@ public class DAOContact extends HibernateDaoSupport{
 		transaction.commit();
 		HibernateUtil.closeSession();
 	}
-	
+
 
 	public Address getAddress() {
 		return address;
