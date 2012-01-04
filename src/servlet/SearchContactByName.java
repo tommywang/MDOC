@@ -25,14 +25,14 @@ import domain.UnknownContactException;
  * Servlet implementation class SearchContact
  */
 @WebServlet("/SearchContact")
-public class SearchContact extends HttpServlet {
+public class SearchContactByName extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	long cpt = 0;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public SearchContact() {
+	public SearchContactByName() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -50,7 +50,8 @@ public class SearchContact extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		Contact contact=searchContact(firstName, lastName);
+		DAOContact daoContact=new DAOContact();
+		Contact contact=daoContact.searchContactByName(firstName, lastName);
 		if (contact==null){
 			response.setContentType( "text/html" );
 			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
@@ -86,27 +87,5 @@ public class SearchContact extends HttpServlet {
 		}
 	}
 
-	private synchronized Contact searchContact(String firstName, String lastName){
-		Session session = HibernateUtil.currentSession();
-		String hqlSearch="select c from Contact as c left join fetch c.address a "
-				+ "left join fetch c.profiles p "
-				+ "left join fetch c.books b "
-				+ "where firstName like :firstName and lastName like :lastName";
-		List list = session.createQuery(hqlSearch).setString("firstName", firstName).setString("lastName", lastName).list();
-		Iterator it = list.iterator();
-		//while(it.hasNext())
-		//{
-		// Contact contact = (Contact)it.next();
-
-		//}
-		HibernateUtil.closeSession();
-		if (it.hasNext()){
-			Contact contact = (Contact)it.next();
-			System.out.println(contact.getLastName());	
-			return contact;
-		}
-		else{
-			return null;
-		}
-	}
+	
 }

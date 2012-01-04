@@ -20,7 +20,11 @@
 <p></p>
 <!--<input type="submit" value="Remove a contact" onclick="javascript:window.location ='pages/removeContact.jsp';"/>
 <p></p>-->
-<input type="submit" value="Find a contact" onclick="javascript:window.location ='searchContact.jsp';"/>
+<input type="submit" value="Find a unique contact by name" onclick="javascript:window.location ='searchContactByName.jsp';"/>
+<p></p>
+<input type="submit" value="Find a unique contact by id" onclick="javascript:window.location ='searchContactById.jsp';"/>
+<p></p>
+<input type="submit" value="Find contacts" onclick="javascript:window.location ='searchContacts.jsp';"/>
 <p></p>
 <!--<input type="submit" value="Update a contact" onclick="javascript:window.location ='pages/updateContact.jsp';"/>
 <p></p>-->

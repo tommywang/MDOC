@@ -47,15 +47,37 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<description>servlet SearchContact</description>
-		<display-name>SearchContact</display-name>
-		<servlet-name>SearchContact</servlet-name>
-		<servlet-class>servlet.SearchContact</servlet-class>
+		<description>servlet SearchContact By Name</description>
+		<display-name>SearchContactByName</display-name>
+		<servlet-name>SearchContactByName</servlet-name>
+		<servlet-class>servlet.SearchContactByName</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>SearchContact</servlet-name>
-		<url-pattern>/pages/SearchContact</url-pattern>  
+		<servlet-name>SearchContactByName</servlet-name>
+		<url-pattern>/pages/SearchContactByName</url-pattern>  
 	</servlet-mapping>		
+	
+	<servlet>
+		<description>servlet SearchContact By Id</description>
+		<display-name>SearchContactById</display-name>
+		<servlet-name>SearchContactById</servlet-name>
+		<servlet-class>servlet.SearchContactById</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearchContactById</servlet-name>
+		<url-pattern>/pages/SearchContactById</url-pattern>  
+	</servlet-mapping>	
+	
+	<servlet>
+		<description>servlet SearchContacts</description>
+		<display-name>SearchContacts</display-name>
+		<servlet-name>SearchContacts</servlet-name>
+		<servlet-class>servlet.SearchContacts</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearchContacts</servlet-name>
+		<url-pattern>/pages/SearchContacts</url-pattern>  
+	</servlet-mapping>
 							
 	<welcome-file-list>
 		<welcome-file>pages/index.jsp</welcome-file>

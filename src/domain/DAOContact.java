@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 
 import util.HibernateUtil;
 
@@ -149,6 +151,62 @@ public class DAOContact {
         session.delete(contact.getAddress());
         transaction.commit();
         HibernateUtil.closeSession();
+	}
+	
+	public synchronized Contact searchContactByName(String firstName, String lastName){
+		Session session = HibernateUtil.currentSession();
+		//HQL from ..join
+		String hqlSearch="select c from Contact as c left join fetch c.address a "
+				+ "left join fetch c.profiles p "
+				+ "left join fetch c.books b "
+				+ "where firstName like :firstName and lastName like :lastName";
+		List list = session.createQuery(hqlSearch).setString("firstName", firstName).setString("lastName", lastName).list();
+		Iterator it = list.iterator();
+		HibernateUtil.closeSession();
+		if (it.hasNext()){
+			Contact contact = (Contact)it.next();
+			//System.out.println(contact.getLastName());	
+			return contact;
+		}
+		else{
+			return null;
+		}
+	}
+	
+	public synchronized Contact searchContactById(long id){
+		Session session = HibernateUtil.currentSession();
+		Transaction transaction = session.beginTransaction();
+		//Contact contactExample=new Contact();
+		//contactExample.setId_contact(id);
+		/*
+		contactExample.setFirstName("Hello");
+		contactExample.setLastName("Titi");
+		Contact contact = (Contact) session.createCriteria(Contact.class).
+				add(Example.create(contactExample)).uniqueResult();*/
+		//HQL Criteria simple
+		Contact contact = (Contact) session.createCriteria(Contact.class).
+				add(Restrictions.like("id_contact", id)).uniqueResult();
+		//System.out.println(contact.getAddress().getStreet());
+		return contact;
+	}
+	
+	public synchronized Set<Contact> searchContacts(String firstName,String lastName,int numResult){
+		Set<Contact> contacts=new HashSet<Contact>();
+		Session session = HibernateUtil.currentSession();
+		Transaction transaction = session.beginTransaction();
+		String mFirstName=firstName+"%";
+		String mLastName=lastName+"%";
+		List list =session.createCriteria(Contact.class).
+				add(Restrictions.like("firstName", mFirstName)).
+				add(Restrictions.like("lastName", mLastName)).
+				setMaxResults(numResult).list();
+		Iterator it = list.iterator();
+		while(it.hasNext()){
+			contacts.add((Contact)it.next());
+		}
+		
+		
+		return contacts;
 	}
 	
 	public Address getAddress() {

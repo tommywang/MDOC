@@ -8,7 +8,7 @@
 </head>
 <body>
 <h3>Enter the contact you are looking for</h3>
-<form method="post" action="SearchContact">
+<form method="post" action="SearchContactByName">
 First Name: <input type="text" name="firstName" size="25">
 <p></p>
 Last Name: <input type="text" name="lastName" size="25">
