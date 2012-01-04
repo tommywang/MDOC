@@ -52,6 +52,7 @@ public class SearchContactById extends HttpServlet {
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		DAOContact daoContact = (DAOContact)context.getBean("beanDAOContact");
 		daoContact.setHibernateTemplate(sessionFactory);
+		//recuperer le contact de la base
 		Contact contact=daoContact.searchContactById(id);
 		if (contact==null){
 			response.setContentType( "text/html" );
@@ -62,6 +63,7 @@ public class SearchContactById extends HttpServlet {
 			out.println( "</body></html>" );
 		}
 		else{
+			//ajouter des attributes pour remplir dynamiquement la page 
 			request.setAttribute("id", contact.getId_contact());
 			request.setAttribute("firstName", contact.getFirstName());
 			request.setAttribute("lastName", contact.getLastName());

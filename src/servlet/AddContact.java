@@ -48,8 +48,8 @@ public class AddContact extends HttpServlet {
 
 		try{
 			daoEntreprise=new DAOEntreprise();
-
 			daoContact = new DAOContact();
+			//recuperer toutes les données
 			String firstName = request.getParameter("firstName");
 			String lastName = request.getParameter("lastName");
 			String email = request.getParameter("email");
@@ -70,8 +70,7 @@ public class AddContact extends HttpServlet {
 			String groupName = request.getParameter("groupName");
 			groupNameSet.add(groupName);
 
-			if (request.getParameter("numSiret")!=""){
-				System.out.println("passe entyrepreise");
+			if (request.getParameter("numSiret")!=""){//entreprise
 				int numSiret=Integer.parseInt(request.getParameter("numSiret"));
 				daoEntreprise.createEntreprise(firstName, lastName, email, numSiret);
 				daoEntreprise.createAdress(street, city, zip, country);
@@ -79,7 +78,7 @@ public class AddContact extends HttpServlet {
 				daoEntreprise.createContactGroupSet(groupNameSet);
 				daoEntreprise.commit();
 			}
-			else{
+			else{//contact 
 				daoContact.createContact(firstName, lastName, email);
 				daoContact.createAdress(street, city, zip, country);
 				daoContact.createPhoneNumberSet(phoneNumberSet, phoneKindSet);

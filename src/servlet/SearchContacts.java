@@ -56,7 +56,7 @@ public class SearchContacts extends HttpServlet {
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		DAOContact daoContact = (DAOContact)context.getBean("beanDAOContact");
 		daoContact.setHibernateTemplate(sessionFactory);
-		//DAOContact daoContact=new DAOContact();
+		//recuperer les contacts de la base
 		Set<Contact> contacts=daoContact.searchContacts(firstName,lastName,numResult);
 		if (contacts.isEmpty()){
 			response.setContentType( "text/html" );
@@ -67,6 +67,7 @@ public class SearchContacts extends HttpServlet {
 			out.println( "</body></html>" );
 		}
 		else{
+			//Construire directement la page
 			response.setContentType( "text/html" );
 			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
 			out.println("<table border=\"1\"><tr><td>Id</td><td>First Name</td><td>Last Name</td><td>Email Name</td>");

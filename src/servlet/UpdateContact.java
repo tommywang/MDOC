@@ -57,7 +57,7 @@ public class UpdateContact extends HttpServlet {
 			String phoneNumber = request.getParameter("phoneNumber");
 			String groupName = request.getParameter("groupName");
 			String numSiret = request.getParameter("numSiret");
-			
+			//Recuperer toutes les données necessaires
 			if (numSiret==""){
 				this.daoContact = (DAOContact)context.getBean("beanDAOContact");
 				this.daoContact.setHibernateTemplate(sessionFactory);

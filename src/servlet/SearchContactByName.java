@@ -53,6 +53,7 @@ public class SearchContactByName extends HttpServlet {
 		daoContact.setHibernateTemplate(sessionFactory);
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
+		//recuperer le contact de la base
 		Contact contact=daoContact.searchContactByName(firstName, lastName);
 		if (contact==null){
 			response.setContentType( "text/html" );
@@ -63,6 +64,7 @@ public class SearchContactByName extends HttpServlet {
 			out.println( "</body></html>" );
 		}
 		else{
+			//ajouter des attributes pour remplir dynamiquement la page 
 			request.setAttribute("id", contact.getId_contact());
 			request.setAttribute("firstName", contact.getFirstName());
 			request.setAttribute("lastName", contact.getLastName());
