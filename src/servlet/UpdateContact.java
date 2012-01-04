@@ -97,6 +97,7 @@ public class UpdateContact extends HttpServlet {
 			String phoneKind = request.getParameter("phoneKind");
 			String phoneNumber = request.getParameter("phoneNumber");
 			String groupName = request.getParameter("groupName");
+			//String groupName1 = request.getParameter("groupName1");
 			String numSiret = request.getParameter("numSiret");
 			
 			if (numSiret==""){

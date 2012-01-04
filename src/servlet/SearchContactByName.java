@@ -20,6 +20,7 @@ import util.HibernateUtil;
 
 import domain.Address;
 import domain.Contact;
+import domain.ContactGroup;
 import domain.DAOContact;
 import domain.Entreprise;
 import domain.UnknownContactException;
@@ -30,7 +31,6 @@ import domain.UnknownContactException;
 @WebServlet("/SearchContact")
 public class SearchContactByName extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	DAOContact daoContact;
 	long cpt = 0;
 
 	/**
@@ -98,17 +98,18 @@ public class SearchContactByName extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		this.daoContact = (DAOContact)context.getBean("beanDAOContact");
-		this.daoContact.setHibernateTemplate(sessionFactory);
+		DAOContact daoContact = (DAOContact)context.getBean("beanDAOContact");
+		daoContact.setHibernateTemplate(sessionFactory);
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		Contact contact=this.daoContact.searchContactByName(firstName, lastName);
+		Contact contact=daoContact.searchContactByName(firstName, lastName);
 		if (contact==null){
-			response.sendRedirect("contactNotFound.jsp");
-//			response.setContentType( "text/html" );
-//			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
-//			out.println( "<h1> Contact Not Found </h1>" );
-//			out.println( "</body></html>" );
+			response.setContentType( "text/html" );
+			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
+			out.println( "<h1> Contact Not Found </h1>" );
+			out.println("<input type=\"submit\" value=\"retour ˆ l'accueil\" onclick=\"javascript:window.location ='accueil.jsp';\"/>");
+
+			out.println( "</body></html>" );
 		}
 		else{
 			//ystem.out.println(contact.getLastName());
@@ -122,6 +123,9 @@ public class SearchContactByName extends HttpServlet {
 			request.setAttribute("country", contact.getAddress().getCountry());
 			request.setAttribute("phoneNumber", contact.getProfiles().iterator().next().getPhoneNumber());
 			request.setAttribute("groupName", contact.getBooks().iterator().next().getGroupName());
+			//Iterator it=contact.getBooks().iterator();
+			//request.setAttribute("groupName", ((ContactGroup) it.next()).getGroupName());
+			//request.setAttribute("groupName1", ((ContactGroup) it.next()).getGroupName());
 			//try{
 				//if (((Entreprise)contact).getNumSiret()!=0)
 				if (contact instanceof Entreprise){

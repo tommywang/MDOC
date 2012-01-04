@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost/dfj_hibernate</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost/jee</property>
         <property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -13,7 +13,7 @@
         <!-- valeur = update i..e si les tables de la base n'existent pas 
         elles sont crees, sinon elles sont MAJ, 
         la valeur =create i.e. creation à chaque lancement  -->
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">create</property>
         <!-- mapping files/lien vers les fichiers de mapping -->
         <mapping resource="domain/Contact.hbm.xml"/>
 		<mapping resource="domain/Address.hbm.xml"/>

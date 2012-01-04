@@ -39,7 +39,9 @@ public class DAOEntreprise extends DAOContact {
 		this.address = new Address(street, city, zip, country);
 		this.entreprise.setAddress(this.address);
 	}
-	
+
+	/*
+	@Transactional
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void createContactGroupSet(final Set<String> groupNameSet){
 		this.hibernateTemplate.execute(new HibernateCallback() {
@@ -73,7 +75,47 @@ public class DAOEntreprise extends DAOContact {
 			}
 		});
 	}
+	*/
 
+	private ContactGroup getContactGroupByName(String name){
+		Session session = HibernateUtil.currentSession();
+		String hqlSearchGroup="from ContactGroup";
+		List list=session.createQuery(hqlSearchGroup).list();
+		Iterator it = list.iterator();
+		while(it.hasNext()){
+			ContactGroup contactGroup=(ContactGroup)it.next();
+			if (contactGroup.getGroupName().equals(name))
+				return contactGroup;
+		}
+		return null;
+	}
+	
+	public void createContactGroupSet(Set<String> groupNameSet){
+
+		Session session = HibernateUtil.currentSession();
+		String hqlSearchGroup="from ContactGroup";
+		List list=session.createQuery(hqlSearchGroup).list();
+		Iterator it = list.iterator();
+		Set<String> groupNameSaved= new HashSet<String>();
+		while(it.hasNext()){
+			groupNameSaved.add(((ContactGroup)it.next()).getGroupName());
+		}
+		for (String groupName : groupNameSet){
+			if (groupNameSaved.contains(groupName)){
+				ContactGroup contactGroup=getContactGroupByName(groupName);
+				this.entreprise.addContactGroup(contactGroup);
+				contactGroup.addContact(this.entreprise);
+				this.contactGroupSet.add(contactGroup);
+			}
+			else{
+				ContactGroup contactGroup = new ContactGroup(groupName);
+				this.entreprise.addContactGroup(contactGroup);
+				contactGroup.addContact(this.entreprise);
+				this.contactGroupSet.add(contactGroup);
+			}
+		}
+	}
+	
 	/*
 	public void createContactGroupSet(Set<String> groupNameSet){
 		Session session = HibernateUtil.currentSession();
@@ -87,11 +129,11 @@ public class DAOEntreprise extends DAOContact {
 				//System.out.println(((ContactGroup)it.next()).getGroupName());
 				ContactGroup contactGroup=(ContactGroup)it.next();
 				if (contactGroup.getGroupName().equals(groupName)){
-					existed=true;
+					existed=true||existed;
 					
 					this.entreprise.addContactGroup(contactGroup);
 					contactGroup.addContact(this.entreprise);
-					this.contactGroupSet.add(contactGroup);
+					//this.contactGroupSet.add(contactGroup);
 					break;
 				}
 			}
@@ -101,9 +143,10 @@ public class DAOEntreprise extends DAOContact {
 			contactGroup.addContact(this.entreprise);
 			this.contactGroupSet.add(contactGroup);
 			}
+			
 		}
 	}
-	*/
+*/
 	
 	public void createPhoneNumberSet(Set<String> phoneNumberSet_, Set<String> phoneKindSet){
 		for (Iterator<String> iterator = phoneKindSet.iterator(), iterator2=phoneNumberSet_.iterator(); iterator.hasNext()&&iterator2.hasNext();) {
@@ -120,6 +163,7 @@ public class DAOEntreprise extends DAOContact {
 		this.entreprise = new Entreprise(firstName, lastName, email,numSiret);
 	}
 	
+	/*
 	@Transactional
 	public void commit(){
 		//Session session = HibernateUtil.currentSession();
@@ -136,7 +180,12 @@ public class DAOEntreprise extends DAOContact {
 		//transaction.commit();
 		//HibernateUtil.closeSession();
 	}
-	/*
+	
+	*/
+	
+	
+	
+	
 	public void commit(){
 		Session session = HibernateUtil.currentSession();
 		Transaction transaction = session.beginTransaction();
@@ -152,7 +201,7 @@ public class DAOEntreprise extends DAOContact {
 		transaction.commit();
 		HibernateUtil.closeSession();
 	}
-	*/
+	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Transactional
@@ -210,6 +259,7 @@ public class DAOEntreprise extends DAOContact {
 		});
 	}
 }
+
 /*
 	public void update(long id, String firstName, String lastName, String email, String street, String city, String zip, String country, 
 			String phoneKind, String phoneNumber, String groupName, int numSiret){

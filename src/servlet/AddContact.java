@@ -48,7 +48,7 @@ public class AddContact extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	
-	/*
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try{
@@ -75,8 +75,11 @@ public class AddContact extends HttpServlet {
 			
 			Set<String> groupNameSet = new HashSet<String>();
 			String groupName = request.getParameter("groupName");
-			groupNameSet.add(groupName);
-			//groupNameSet.add("Travail");
+			//String groupName1 = request.getParameter("groupName1");
+			//if (!groupName.equals(""))
+				groupNameSet.add(groupName);
+			//if (!groupName1.equals(""))
+			//	groupNameSet.add(groupName1);
 			
 			if (request.getParameter("numSiret")!=""){
 				System.out.println("passe entyrepreise");
@@ -100,16 +103,18 @@ public class AddContact extends HttpServlet {
 			request.getRequestDispatcher("addContactError.jsp").forward(request, response);
 		}
 	}
-	*/
+	
+	
+	/*
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try{
-			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			
 			ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-			this.daoContact = (DAOContact)context.getBean("beanDAOContact");
-			this.daoContact.setHibernateTemplate(sessionFactory);
-			this.daoEntreprise = (DAOEntreprise)context.getBean("beanDAOEntreprise");
-			this.daoEntreprise.setHibernateTemplate(sessionFactory);
+			
+			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			
+			
 			String firstName = request.getParameter("firstName");
 			String lastName = request.getParameter("lastName");
 			String email = request.getParameter("email");
@@ -132,7 +137,9 @@ public class AddContact extends HttpServlet {
 			//groupNameSet.add("Travail");
 			
 			if (request.getParameter("numSiret")!=""){
-				System.out.println("passe entyrepreise");
+				//SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+				this.daoEntreprise = (DAOEntreprise)context.getBean("beanDAOEntreprise");
+				this.daoEntreprise.setHibernateTemplate(sessionFactory);
 				int numSiret=Integer.parseInt(request.getParameter("numSiret"));
 				daoEntreprise.createEntreprise(firstName, lastName, email, numSiret);
 				daoEntreprise.createAdress(street, city, zip, country);
@@ -141,6 +148,9 @@ public class AddContact extends HttpServlet {
 				daoEntreprise.commit();
 			}
 			else{
+				//SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+				this.daoContact = (DAOContact)context.getBean("beanDAOContact");
+				this.daoContact.setHibernateTemplate(sessionFactory);
 				daoContact.createContact(firstName, lastName, email);
 				daoContact.createAdress(street, city, zip, country);
 				daoContact.createPhoneNumberSet(phoneNumberSet, phoneKindSet);
@@ -150,8 +160,10 @@ public class AddContact extends HttpServlet {
 			request.getRequestDispatcher("addContactSuccess.jsp").forward(request, response);
 		}
 		catch (Exception e){
+			e.printStackTrace();
 			request.getRequestDispatcher("addContactError.jsp").forward(request, response);
 		}
 	}
+	*/
 }
 

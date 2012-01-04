@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import util.HibernateUtil;
 
@@ -53,7 +59,11 @@ public class SearchContacts extends HttpServlet {
 		int numResult =Integer.parseInt(request.getParameter("numResult"));
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		DAOContact daoContact=new DAOContact();
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		DAOContact daoContact = (DAOContact)context.getBean("beanDAOContact");
+		daoContact.setHibernateTemplate(sessionFactory);
+		//DAOContact daoContact=new DAOContact();
 		Set<Contact> contacts=daoContact.searchContacts(firstName,lastName,numResult);
 		if (contacts.isEmpty()){
 			response.setContentType( "text/html" );

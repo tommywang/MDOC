@@ -58,6 +58,7 @@
 					<td align="right">Group Name*:</td> 
 					<td align="left"><input type="text" name="groupName" size="25" value="<%= (String)request.getAttribute("groupName").toString() %>"></td>
 				</tr>
+		
 				<tr>
 					<td align="right">Siret Number:</td>
 					<td align="left"> <input type="hidden" name="numSiret" size="25" value="<%= (String)request.getAttribute("numSiret").toString() %>"></td>

@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,17 +43,20 @@ public class DefaultDatabase extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
-			System.out.println("yessssssssssssssss");
 			ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 			this.daoEntreprise = (DAOEntreprise)context.getBean("beanDAOEntreprise");
 			this.daoContact = (DAOContact)context.getBean("beanDAOContact");
 			this.daoContact.springSetterWay(context); //on présuppose la base vide à ce moment
-			System.out.println("fffffffffffffffffffffff");
 			this.daoContact.commit();
-			System.out.println("fffffffffffffffffffffff");
 			this.daoContact.springConstructorWay(context);
 			this.daoContact.commitAddress();
-			response.sendRedirect("pages/accueil.jsp");
+			//response.sendRedirect("pages/accueil.jsp");
+			response.setContentType( "text/html" );
+			PrintWriter out = response.getWriter(); out.println( "<html><body>" );
+			out.println( "<h1> Contact Added </h1>" );
+			out.println("<input type=\"submit\" value=\"retour ˆ l'accueil\" onclick=\"javascript:window.location ='pages/accueil.jsp';\"/>");
+
+			out.println( "</body></html>" );
 		}
 		catch (Exception e){
 			e.printStackTrace();

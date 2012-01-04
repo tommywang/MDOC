@@ -8,9 +8,6 @@
 </head>
 <body>
 	<h1> Contact Ajouté </h1>
-	<h1> Adresse Ajoutée </h1>
-	<h1> Numéro de téléphone n°1 ajouté </h1>
-	<h1> Groupe de contact n°1 ajouté </h1>
 	<input type="submit" value="retour à l'accueil" onclick="javascript:window.location ='accueil.jsp';"/>
 	<p></p>
 </body>

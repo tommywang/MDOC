@@ -13,7 +13,7 @@ Les contacts dont le prénom commence par: <input type="text" name="firstName" si
 <p></p>
 Les contacts dont le nom commence par: <input type="text" name="lastName" size="25">
 <p></p>
-Nombre Maximum de résultat désiré: <input type="text" name="numResult" size="25">
+Nombre Maximum de résultat désiré: <input type="text" name="numResult" size="25" value="10">
 <p></p>
 <input type="submit" value="Submit">
 <input type="reset" value="Reset">
